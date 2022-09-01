@@ -1,12 +1,12 @@
 @use '../variables'
 @use '../mixins'
 
-#header
+#header-container
     @include mixins.center
     width: 100%
-
+    justify-content: space-evenly
     h1
-        text-align: center
+
         color: variables.$text-color-primary
         font-size: 4rem
         padding: 1rem 0

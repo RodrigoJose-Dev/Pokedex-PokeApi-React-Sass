@@ -2,13 +2,19 @@ import { useState } from "react";
 
 import "../styles/components/searchbar.sass";
 
-const Searchbar = () => {
+const Searchbar = (props) => {
+    const { onSearch } = props;
+
     const [search, setSearch] = useState("charizard");
 
     //recebe o input do usuário na barra de busca
     const onChangeHandler = (e) => {
-        console.log("pokemon: ", e.target.value);
         setSearch(e.target.value);
+    };
+
+    //guarda o que o usuário digitou
+    const onButtonClickHandler = () => {
+        onSearch(search);
     };
 
     return (
@@ -20,7 +26,9 @@ const Searchbar = () => {
                     onChange={onChangeHandler}
                 />
             </div>
-            <div id="search-btn"></div>
+            <div id="search-btn">
+                <button onClick={onButtonClickHandler}>Buscar</button>
+            </div>
         </div>
     );
 };

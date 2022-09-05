@@ -1,0 +1,19 @@
+@use '../variables'
+@use '../mixins'
+
+section
+    width: 100%
+    padding: 20px
+    border: 1px solid white
+    margin-top: 2em
+
+    #pokedex-header
+        display: flex
+        justify-content: space-between
+        color: variables.$text-color-primary
+        font-size: 16pt
+
+    #pokedex-grid
+        display: grid
+        gap: 10px
+        grid-template-columns: repeat(3 , 1fr)

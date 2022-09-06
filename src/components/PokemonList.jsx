@@ -1,4 +1,4 @@
-//import { PokemonItem } from "./PokemonItem";
+import PokemonItem from "./PokemonItem";
 
 import "../styles/components/pokemonlist.sass";
 
@@ -12,19 +12,13 @@ const PokemonList = ({ pokemons, loading }) => {
             {loading ? (
                 <div>Carregando...</div>
             ) : (
-                //lista de pokemons
-                <div id="pokemon-grid">
-                    {pokemons.map((pokemon, index) => {
-                        return (
-                            <div>
-                                <div>nome: {pokemon.id}</div>
-                                <img
-                                    src={pokemon.sprites.url}
-                                    alt={pokemon.name}
-                                />
-                            </div>
-                        );
-                    })}
+                <div id="pokedex-grid">
+                    {pokemons &&
+                        pokemons.map((pokemon, index) => {
+                            return (
+                                <PokemonItem key={index} pokemon={pokemon} />
+                            );
+                        })}
                 </div>
             )}
         </section>

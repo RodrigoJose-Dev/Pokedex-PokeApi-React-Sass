@@ -28,6 +28,7 @@ function App() {
     //toda vez que carregar a página, fará uma busca para
     //encontrar os pokemons
     useEffect(() => {
+        console.log("carregou");
         fetchPokemons();
     }, []);
 

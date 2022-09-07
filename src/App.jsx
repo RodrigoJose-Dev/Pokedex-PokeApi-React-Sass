@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { getPokemons } from "./scripts/api";
+import { getPokemonData, getPokemons } from "./scripts/api";
 
 import Header from "./components/Header";
 import Searchbar from "./components/Searchbar";
@@ -13,12 +13,18 @@ function App() {
     //lista dos pokemons
     const [pokemons, setPokemons] = useState([]);
 
-    //solicitar pokemons
+    //chama todos os pokemons, a partir de cada pokemon, chama o proprio get
+    //deles para pegar as informações de cada um
     const fetchPokemons = async () => {
         try {
             setLoading(true);
-            const result = await getPokemons();
-            setPokemons(result);
+            const data = await getPokemons();
+            const promises = data.results.map(async (pokemon) => {
+                return await getPokemonData(pokemon.url);
+            });
+
+            const results = await Promise.all(promises);
+            setPokemons(results);
             setLoading(false);
         } catch (error) {
             console.log("fetchPokemons erro: ", error);
@@ -36,7 +42,7 @@ function App() {
         <div className="App">
             <Header />
             <Searchbar />
-            <PokemonList pokemons={pokemons.results} loading={loading} />
+            <PokemonList pokemons={pokemons} loading={loading} />
         </div>
     );
 }

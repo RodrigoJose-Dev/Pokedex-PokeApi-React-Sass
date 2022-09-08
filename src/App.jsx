@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react";
 
-import { getPokemonData, getPokemons } from "./scripts/api";
+import { FavoriteProvider } from "./contexts/FavoriteContext";
+
+import { getPokemonData, getPokemons, searchPokemon } from "./scripts/api";
 
 import Navbar from "./components/Navbar";
 import Searchbar from "./components/Searchbar";
 import PokemonList from "./components/PokemonList";
-import { FavoriteProvider } from "./contexts/FavoriteContext";
+
+import "./styles/app.sass";
 
 function App() {
     //state de loading da tela
     const [loading, setLoading] = useState(false);
+
+    //state not found
+    const [notFound, setNotFound] = useState(false);
 
     //state da lista de pokemons
     const [pokemons, setPokemons] = useState([]);
@@ -32,6 +38,7 @@ function App() {
     const fetchPokemons = async () => {
         try {
             setLoading(true);
+            setNotFound(false);
             const data = await getPokemons(itensPerPage, itensPerPage * page);
             const promises = data.results.map(async (pokemon) => {
                 return await getPokemonData(pokemon.url);
@@ -84,6 +91,26 @@ function App() {
         setFavorites(updateFavorites);
     };
 
+    const onSearchHandler = async (pokemon) => {
+        if (!pokemon) {
+            return fetchPokemons();
+        }
+
+        setLoading(true);
+        setNotFound(false);
+
+        const result = await searchPokemon(pokemon);
+
+        if (!result) {
+            setNotFound(true);
+        } else {
+            setPokemons([result]);
+            setPage(0);
+            setTotalPages(1);
+        }
+        setLoading(false);
+    };
+
     return (
         <FavoriteProvider
             value={{
@@ -93,14 +120,18 @@ function App() {
         >
             <div className="App">
                 <Navbar />
-                <Searchbar />
-                <PokemonList
-                    pokemons={pokemons}
-                    loading={loading}
-                    currentPage={page}
-                    setPage={setPage}
-                    totalPages={totalPages}
-                />
+                <Searchbar onSearch={onSearchHandler} />
+                {notFound ? (
+                    <div id="not-found-txt">Pokémon não encontrado!</div>
+                ) : (
+                    <PokemonList
+                        pokemons={pokemons}
+                        loading={loading}
+                        currentPage={page}
+                        setPage={setPage}
+                        totalPages={totalPages}
+                    />
+                )}
             </div>
         </FavoriteProvider>
     );

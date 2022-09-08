@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 
 import { getPokemonData, getPokemons } from "./scripts/api";
 
-import Header from "./components/Header";
+import Navbar from "./components/Navbar";
 import Searchbar from "./components/Searchbar";
 import PokemonList from "./components/PokemonList";
+import { FavoriteProvider } from "./contexts/FavoriteContext";
 
 function App() {
     //state de loading da tela
@@ -18,7 +19,11 @@ function App() {
     //state do total de páginas
     const [totalPages, setTotalPages] = useState(0);
 
-    const itensPerPage = 50;
+    //state lista de pokemons favoritos
+    const [favorites, setFavorites] = useState([]);
+
+    const itensPerPage = 30;
+
     //chama todos os pokemons, a partir de cada pokemon, chama o proprio get
     //deles para pegar as informações de cada um
     //é passado itensPerPage para denominar o limit e itensPerPage * page para
@@ -42,23 +47,45 @@ function App() {
     };
 
     //toda vez que carregar a página, fará uma busca para
-    //encontrar os pokemons
+    //encontrar os pokemons e atualizará o número da página
+    //toda vez que a página for mudada
     useEffect(() => {
-        console.log("carregou");
         fetchPokemons();
-    }, []);
+    }, [page]);
+
+    const updateFavoritePokemons = (name) => {
+        const updateFavorites = [...favorites];
+        const favoriteIndex = favorites.indexOf(name);
+
+        //se já houver o pokémon nos favoritos, ele é removido
+        //se não, ele é adicionado na lista
+        if (favoriteIndex >= 0) {
+            updateFavorites.slice(favoriteIndex, 1);
+        } else {
+            updateFavorites.push(name);
+        }
+        setFavorites(updateFavorites);
+    };
 
     return (
-        <div className="App">
-            <Header />
-            <Searchbar />
-            <PokemonList
-                pokemons={pokemons}
-                loading={loading}
-                currentPage={page}
-                totalPages={totalPages}
-            />
-        </div>
+        <FavoriteProvider
+            value={{
+                favoritePokemons: favorites,
+                updateFavoritePokemons: updateFavoritePokemons,
+            }}
+        >
+            <div className="App">
+                <Navbar />
+                <Searchbar />
+                <PokemonList
+                    pokemons={pokemons}
+                    loading={loading}
+                    currentPage={page}
+                    setPage={setPage}
+                    totalPages={totalPages}
+                />
+            </div>
+        </FavoriteProvider>
     );
 }
 

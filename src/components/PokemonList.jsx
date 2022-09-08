@@ -8,21 +8,26 @@ const PokemonList = ({
     loading,
     currentPage,
     totalPages,
+    setPage,
     onPreviousPage,
     onNextPage,
 }) => {
     //voltar para a página anterior
     const onPreviousPageHandler = () => {
-        console.log("voltou para a página anterior");
+        if (currentPage > 0) {
+            setPage(currentPage - 1);
+        }
     };
     const onNextPageHandler = () => {
-        console.log("foi para a próxima página");
+        if (currentPage + 1 !== totalPages) {
+            setPage(currentPage + 1);
+        }
     };
 
     return (
         <section>
             <div id="pokedex-header">
-                <h1>Pokemon List</h1>
+                <h1>Lista de Pokémons</h1>
                 <Pagination
                     currentPage={currentPage + 1}
                     totalPages={totalPages}
@@ -31,7 +36,7 @@ const PokemonList = ({
                 />
             </div>
             {loading ? (
-                <div>Carregando...</div>
+                <div id="loading-txt">Carregando...</div>
             ) : (
                 <div id="pokedex-grid">
                     {pokemons &&

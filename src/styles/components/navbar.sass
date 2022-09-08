@@ -1,12 +1,16 @@
 @use '../variables'
 @use '../mixins'
 
-#header-container
+#nav-container
     @include mixins.center
     width: 100%
     justify-content: space-evenly
+
     h1
 
         color: variables.$text-color-primary
         font-size: 4rem
-        padding: 1rem 0
+        margin: 1rem 0
+
+    #heart
+        color: variables.$text-color-primary

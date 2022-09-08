@@ -7,12 +7,16 @@ const Pagination = ({
     onNextPage,
 }) => {
     return (
-        <div className="container">
-            <button onClick={onPreviousPage}>◀</button>
-            <div>
+        <div id="container">
+            <button id="left-btn" onClick={onPreviousPage}>
+                ◀
+            </button>
+            <>
                 {currentPage} de {totalPages}
-            </div>
-            <button onClick={onNextPage}>▶</button>
+            </>
+            <button id="right-btn" onClick={onNextPage}>
+                ▶
+            </button>
         </div>
     );
 };

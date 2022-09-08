@@ -23,6 +23,7 @@ function App() {
     const [favorites, setFavorites] = useState([]);
 
     const itensPerPage = 30;
+    const favoritesKey = "f";
 
     //chama todos os pokemons, a partir de cada pokemon, chama o proprio get
     //deles para pegar as informações de cada um
@@ -46,6 +47,18 @@ function App() {
         }
     };
 
+    //pegando as informações de favoritos
+    const loadFavoritePokemons = () => {
+        const pokemons = JSON.parse(window.localStorage.getItem(favoritesKey));
+        setFavorites(pokemons);
+    };
+
+    //toda vez que carregar a página, irá carregar as informações armazenadas
+    //no localstorage (pokemons favoritos)
+    useEffect(() => {
+        loadFavoritePokemons();
+    }, []);
+
     //toda vez que carregar a página, fará uma busca para
     //encontrar os pokemons e atualizará o número da página
     //toda vez que a página for mudada
@@ -60,10 +73,14 @@ function App() {
         //se já houver o pokémon nos favoritos, ele é removido
         //se não, ele é adicionado na lista
         if (favoriteIndex >= 0) {
-            updateFavorites.slice(favoriteIndex, 1);
+            updateFavorites.splice(favoriteIndex, 1);
         } else {
             updateFavorites.push(name);
         }
+        window.localStorage.setItem(
+            favoritesKey,
+            JSON.stringify(updateFavorites)
+        );
         setFavorites(updateFavorites);
     };
 

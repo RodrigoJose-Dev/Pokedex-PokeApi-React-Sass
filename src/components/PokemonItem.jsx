@@ -1,10 +1,25 @@
+import { useContext } from "react";
+
+import { BsSuitHeartFill, BsSuitHeart } from "react-icons/bs";
+
+import FavoriteContext from "../contexts/FavoriteContext";
+
 import "../styles/components/pokemonitem.sass";
 
 const PokemonItem = ({ pokemon }) => {
+    const { favoritePokemons, updateFavoritePokemons } =
+        useContext(FavoriteContext);
+
     const onHeartClick = () => {
-        console.log("favoritou");
+        updateFavoritePokemons(pokemon.name);
     };
-    const heart = "❤";
+
+    const heart = favoritePokemons.includes(pokemon.name) ? (
+        <BsSuitHeartFill />
+    ) : (
+        <BsSuitHeart />
+    );
+
     return (
         <div className="card">
             <div className="img-container">

@@ -10,7 +10,9 @@ const Navbar = () => {
         <nav>
             <div id="nav-container">
                 <h1>Pokedex</h1>
-                <div id="heart">{favoritePokemons.length}❤</div>
+                <div id="heart">
+                    {favoritePokemons.length} <span>❤</span>
+                </div>
             </div>
         </nav>
     );
